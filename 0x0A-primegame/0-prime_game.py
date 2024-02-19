@@ -1,64 +1,42 @@
 #!/usr/bin/python3
-
-"""
-This module provides the function `isWinner`
-"""
+"""0. Prime Game - Maria and Ben are playing a game"""
 
 
 def isWinner(x, nums):
+    """x - rounds
+    nums - numbers list
     """
-    This function plays the primegame between
-    two players and returns the winner
+    if x <= 0 or nums is None:
+        return None
+    if x != len(nums):
+        return None
+
+    ben = 0
+    maria = 0
+
+    a = [1 for x in range(sorted(nums)[-1] + 1)]
+    a[0], a[1] = 0, 0
+    for i in range(2, len(a)):
+        rm_multiples(a, i)
+
+    for i in nums:
+        if sum(a[0:i + 1]) % 2 == 0:
+            ben += 1
+        else:
+            maria += 1
+    if ben > maria:
+        return "Ben"
+    if maria > ben:
+        return "Maria"
+    return None
+
+
+def rm_multiples(ls, x):
+    """removes multiple
+    of primes
     """
-    if x is None or nums is None:
-        return
-    if not isinstance(x, int):
-        return
-    if type(nums) != list:
-        return
-    if len(nums) != x:
-        return
-
-    class PrimeGame:
-        """ A class for playaing Prime game """
-        def __init__(self, X, Nums):
-            self.x = X
-            self.nums = Nums
-            self.Ben = 0
-            self.Maria = 0
-            self.roundList = []
-
-        @staticmethod
-        def checkPrime(k):
-            """
-            checks if the input x is a prime number
-            """
-            if k == 1:
-                return False
-            for i in range(2, int(k / 2) + 1):
-                if k % i == 0:
-                    return False
-            return True
-
-        def play(self):
-            """
-            Starts the gameplay to determine the winner
-            """
-            for n in self.nums:
-                self.roundList = [i for i in range(1, n + 1)]
-                self.roundList = list(filter(self.checkPrime, self.roundList))
-                numOfPrime = len(self.roundList)
-                if numOfPrime % 2 == 0:
-                    self.Ben += 1
-                else:
-                    self.Maria += 1
-
-    game = PrimeGame(x, nums)
-    game.play()
-
-    if game.Ben > game.Maria:
-        return 'Ben'
-    elif game.Maria > game.Ben:
-        return 'Maria'
-    else:
-        return
+    for i in range(2, len(ls)):
+        try:
+            ls[i * x] = 0
+        except (ValueError, IndexError):
+            break
